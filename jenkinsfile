@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'GIT_BRANCH', defaultValue: 'main', description: 'Git branch to build')
+        string(name: 'DOCKER_IMAGE_NAME', defaultValue: 'myapp', description: 'Docker image name')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull code from Git repository
+                checkout([$class: 'GitSCM',
+                    branches: [[name: "${params.GIT_BRANCH}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'CleanCheckout'],
+                        [$class: 'LocalBranch', localBranch: "*"],
+                        [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: true],
+                        [$class: 'RelativeTargetDirectory', relativeTargetDir: ""]]
+                ])
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+                script {
+                    def dockerImage = docker.build(params.DOCKER_IMAGE_NAME, '.')
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Call your testing function here
+                // Example: sh 'pytest tests'
+                sh 'echo "Running tests..."'
+            }
+        }
+
+        stage('Deploy to AWS') {
+            steps {
+                // Deploy to AWS Cloud
+                // Example: sh 'aws ecs update-service --cluster my-cluster --service my-service --force-new-deployment'
+                sh 'echo "Deploying to AWS..."'
+            }
+        }
+    }
+
+    post {
+        failure {
+            // Define what to do on pipeline failure
+            mail to: 'admin@example.com',
+                subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
+                body: "The Jenkins pipeline ${currentBuild.fullDisplayName} has failed."
+        }
+    }
+}
