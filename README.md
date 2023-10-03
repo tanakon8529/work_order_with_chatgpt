@@ -1,4 +1,4 @@
-Designing the architecture for a complex system like a property management system (PMS) with a Work Order module and integration with ChatGPT involves multiple components and tools. Below is an architecture diagram outlining the high-level components and their interactions. Please note that this is a simplified representation, and the actual architecture may vary based on specific requirements and technologies.
+Designing the architecture (Mockup Project) for a complex system like a property management system (PMS) with a Work Order module and integration with ChatGPT involves multiple components and tools. Below is an architecture diagram outlining the high-level components and their interactions. Please note that this is a simplified representation, and the actual architecture may vary based on specific requirements and technologies.
 
 Components and Tools:
 
